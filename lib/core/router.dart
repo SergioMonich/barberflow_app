@@ -1,11 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
 import '../features/auth/auth_page.dart';
 import '../features/clientes/cliente.dart';
 import '../features/clientes/cliente_form_page.dart';
 import '../features/clientes/clientes_page.dart';
+import '../features/servicos/servico.dart';
+import '../features/servicos/servico_form_page.dart';
+import '../features/servicos/servicos_page.dart';
+import '../features/agenda/agenda_page.dart';
+import '../features/agenda/agendamento_form_page.dart';
 import 'api_client.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -24,14 +28,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       final noLogin = state.matchedLocation == '/login';
 
       if (!logado) return noLogin ? null : '/login';
-      if (noLogin) return '/clientes';
+      if (noLogin) return '/agenda';
       return null;
     },
     routes: [
-      GoRoute(
-        path: '/login',
-        builder: (context, state) => const AuthPage(),
-      ),
+      GoRoute(path: '/login', builder: (context, state) => const AuthPage()),
       GoRoute(
         path: '/clientes',
         builder: (context, state) => const ClientesPage(),
@@ -44,6 +45,27 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/clientes/editar',
         builder: (context, state) =>
             ClienteFormPage(cliente: state.extra as Cliente?),
+      ),
+      GoRoute(
+        path: '/servicos',
+        builder: (context, state) => const ServicosPage(),
+      ),
+      GoRoute(
+        path: '/servicos/novo',
+        builder: (context, state) => const ServicoFormPage(),
+      ),
+      GoRoute(
+        path: '/servicos/editar',
+        builder: (context, state) =>
+            ServicoFormPage(servico: state.extra as Servico?),
+      ),
+            GoRoute(
+        path: '/agenda',
+        builder: (context, state) => const AgendaPage(),
+      ),
+      GoRoute(
+        path: '/agenda/novo',
+        builder: (context, state) => const AgendamentoFormPage(),
       ),
     ],
   );

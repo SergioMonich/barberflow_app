@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../core/api_client.dart';
-import 'cliente.dart';
-import 'clientes_repository.dart';
+import 'servico.dart';
+import 'servicos_repository.dart';
 
-class ClientesPage extends ConsumerWidget {
-  const ClientesPage({super.key});
+class ServicosPage extends ConsumerWidget {
+  const ServicosPage({super.key});
 
-  Future<void> _excluir(
+  Future<void> _desativar(
     BuildContext context,
     WidgetRef ref,
-    Cliente cliente,
+    Servico servico,
   ) async {
     final confirmou = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Excluir cliente'),
-        content: Text('Deseja excluir ${cliente.nome}?'),
+        title: const Text('Desativar serviço'),
+        content: Text(
+          'Deseja desativar "${servico.nome}"? '
+          'Os agendamentos já feitos não são afetados.',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
@@ -26,7 +28,7 @@ class ClientesPage extends ConsumerWidget {
           ),
           FilledButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Excluir'),
+            child: const Text('Desativar'),
           ),
         ],
       ),
@@ -34,42 +36,28 @@ class ClientesPage extends ConsumerWidget {
     if (confirmou != true) return;
 
     try {
-      await ref.read(clientesRepositoryProvider).excluir(cliente.id);
-      ref.invalidate(clientesProvider);
+      await ref.read(servicosRepositoryProvider).desativar(servico.id);
+      ref.invalidate(servicosProvider);
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(mensagemDeErro(e))),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(mensagemDeErro(e))));
       }
     }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final clientes = ref.watch(clientesProvider);
+    final servicos = ref.watch(servicosProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Clientes'),
-        actions: [
-          IconButton(
-            tooltip: 'Serviços',
-            icon: const Icon(Icons.content_cut),
-            onPressed: () => context.push('/servicos'),
-          ),
-          IconButton(
-            tooltip: 'Sair',
-            icon: const Icon(Icons.logout),
-            onPressed: () => ref.read(tokenProvider.notifier).definir(null),
-          ),
-        ],
-      ),
+      appBar: AppBar(title: const Text('Serviços')),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push('/clientes/novo'),
+        onPressed: () => context.push('/servicos/novo'),
         child: const Icon(Icons.add),
       ),
-      body: clientes.when(
+      body: servicos.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (erro, _) => Center(
           child: Column(
@@ -78,7 +66,7 @@ class ClientesPage extends ConsumerWidget {
               Text(mensagemDeErro(erro)),
               const SizedBox(height: 12),
               FilledButton(
-                onPressed: () => ref.invalidate(clientesProvider),
+                onPressed: () => ref.invalidate(servicosProvider),
                 child: const Text('Tentar novamente'),
               ),
             ],
@@ -86,44 +74,43 @@ class ClientesPage extends ConsumerWidget {
         ),
         data: (lista) {
           if (lista.isEmpty) {
-            return const Center(child: Text('Nenhum cliente cadastrado ainda.'));
+            return const Center(
+              child: Text('Nenhum serviço cadastrado ainda.'),
+            );
           }
           return RefreshIndicator(
             onRefresh: () async {
-              ref.invalidate(clientesProvider);
-              await ref.read(clientesProvider.future);
+              ref.invalidate(servicosProvider);
+              await ref.read(servicosProvider.future);
             },
             child: ListView.separated(
               itemCount: lista.length,
               separatorBuilder: (_, _) => const Divider(height: 1),
               itemBuilder: (context, indice) {
-                final cliente = lista[indice];
+                final servico = lista[indice];
                 return ListTile(
-                  title: Text(cliente.nome),
-                  subtitle: Column(
+                  title: Text(servico.nome),
+                                    subtitle: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (cliente.telefone != null &&
-                          cliente.telefone!.isNotEmpty)
-                        Text(cliente.telefone!),
-                      if (cliente.email != null && cliente.email!.isNotEmpty)
-                        Text(cliente.email!),
-                      if (cliente.observacoes != null &&
-                          cliente.observacoes!.isNotEmpty)
+                      Text(
+                        '${servico.precoFormatado} · ${servico.duracaoMinutos} min',
+                      ),
+                      if (servico.descricao != null &&
+                          servico.descricao!.isNotEmpty)
                         Text(
-                          cliente.observacoes!,
+                          servico.descricao!,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(fontStyle: FontStyle.italic),
                         ),
                     ],
                   ),
-                  onTap: () =>
-                      context.push('/clientes/editar', extra: cliente),
+                  onTap: () => context.push('/servicos/editar', extra: servico),
                   trailing: IconButton(
-                    tooltip: 'Excluir',
+                    tooltip: 'Desativar',
                     icon: const Icon(Icons.delete_outline),
-                    onPressed: () => _excluir(context, ref, cliente),
+                    onPressed: () => _desativar(context, ref, servico),
                   ),
                 );
               },
