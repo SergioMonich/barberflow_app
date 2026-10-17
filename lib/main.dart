@@ -15,6 +15,7 @@ class BarberFlowApp extends ConsumerWidget {
     final router = ref.watch(routerProvider);
 
         return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
       title: 'BarberFlow',
       theme: ThemeData(colorSchemeSeed: Colors.indigo, useMaterial3: true),
       routerConfig: router,
