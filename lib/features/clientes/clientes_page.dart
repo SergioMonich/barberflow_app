@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -28,9 +27,7 @@ class ClientesPage extends ConsumerWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: _superficie,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text(
           'Excluir cliente',
           style: TextStyle(
@@ -50,9 +47,7 @@ class ClientesPage extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            style: TextButton.styleFrom(
-              foregroundColor: _textoSecundario,
-            ),
+            style: TextButton.styleFrom(foregroundColor: _textoSecundario),
             child: const Text('Cancelar'),
           ),
           FilledButton(
@@ -74,18 +69,14 @@ class ClientesPage extends ConsumerWidget {
     if (confirmou != true) return;
 
     try {
-      await ref
-          .read(clientesRepositoryProvider)
-          .excluir(cliente.id);
+      await ref.read(clientesRepositoryProvider).excluir(cliente.id);
 
       ref.invalidate(clientesProvider);
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(mensagemDeErro(e)),
-          ),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(mensagemDeErro(e))));
       }
     }
   }
@@ -97,18 +88,15 @@ class ClientesPage extends ConsumerWidget {
   }) {
     final nome = cliente.nome.trim();
 
-    final inicial = nome.isNotEmpty
-        ? nome.substring(0, 1).toUpperCase()
-        : '?';
+    final inicial = nome.isNotEmpty ? nome.substring(0, 1).toUpperCase() : '?';
 
-    final temTelefone = cliente.telefone != null &&
-        cliente.telefone!.isNotEmpty;
+    final temTelefone =
+        cliente.telefone != null && cliente.telefone!.isNotEmpty;
 
-    final temEmail = cliente.email != null &&
-        cliente.email!.isNotEmpty;
+    final temEmail = cliente.email != null && cliente.email!.isNotEmpty;
 
-    final temObservacoes = cliente.observacoes != null &&
-        cliente.observacoes!.isNotEmpty;
+    final temObservacoes =
+        cliente.observacoes != null && cliente.observacoes!.isNotEmpty;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
@@ -122,10 +110,7 @@ class ClientesPage extends ConsumerWidget {
         borderRadius: BorderRadius.circular(14),
         child: InkWell(
           borderRadius: BorderRadius.circular(14),
-          onTap: () => context.push(
-            '/clientes/editar',
-            extra: cliente,
-          ),
+          onTap: () => context.push('/clientes/editar', extra: cliente),
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Row(
@@ -154,8 +139,7 @@ class ClientesPage extends ConsumerWidget {
 
                 Expanded(
                   child: Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         cliente.nome,
@@ -223,12 +207,10 @@ class ClientesPage extends ConsumerWidget {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: _fundo,
-                            borderRadius:
-                                BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(8),
                           ),
                           child: Row(
-                            crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Icon(
                                 Icons.notes_rounded,
@@ -242,8 +224,7 @@ class ClientesPage extends ConsumerWidget {
                                 child: Text(
                                   cliente.observacoes!,
                                   maxLines: 2,
-                                  overflow:
-                                      TextOverflow.ellipsis,
+                                  overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
                                     fontSize: 12,
                                     color: _textoSecundario,
@@ -264,16 +245,10 @@ class ClientesPage extends ConsumerWidget {
                 // Ação de exclusão
                 IconButton(
                   tooltip: 'Excluir cliente',
-                  icon: const Icon(
-                    Icons.delete_outline_rounded,
-                    size: 20,
-                  ),
+                  icon: const Icon(Icons.delete_outline_rounded, size: 20),
                   color: _textoSecundario,
-                  hoverColor: _erroCor.withValues(
-                    alpha: 0.08,
-                  ),
-                  onPressed: () =>
-                      _excluir(context, ref, cliente),
+                  hoverColor: _erroCor.withValues(alpha: 0.08),
+                  onPressed: () => _excluir(context, ref, cliente),
                 ),
               ],
             ),
@@ -334,38 +309,27 @@ class ClientesPage extends ConsumerWidget {
     );
   }
 
-  Widget _estadoErro(
-    WidgetRef ref,
-    Object erro,
-  ) {
+  Widget _estadoErro(WidgetRef ref, Object erro) {
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
-              Icons.error_outline_rounded,
-              size: 40,
-              color: _erroCor,
-            ),
+            const Icon(Icons.error_outline_rounded, size: 40, color: _erroCor),
 
             const SizedBox(height: 16),
 
             Text(
               mensagemDeErro(erro),
               textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 14,
-                color: _textoSecundario,
-              ),
+              style: const TextStyle(fontSize: 14, color: _textoSecundario),
             ),
 
             const SizedBox(height: 20),
 
             FilledButton(
-              onPressed: () =>
-                  ref.invalidate(clientesProvider),
+              onPressed: () => ref.invalidate(clientesProvider),
               style: FilledButton.styleFrom(
                 backgroundColor: _destaque,
                 foregroundColor: _texto,
@@ -408,22 +372,16 @@ class ClientesPage extends ConsumerWidget {
         actions: [
           IconButton(
             tooltip: 'Serviços',
-            icon: const Icon(
-              Icons.content_cut_rounded,
-            ),
+            icon: const Icon(Icons.content_cut_rounded),
             color: _texto,
             onPressed: () => context.push('/servicos'),
           ),
 
           IconButton(
             tooltip: 'Sair',
-            icon: const Icon(
-              Icons.logout_rounded,
-            ),
+            icon: const Icon(Icons.logout_rounded),
             color: _textoSecundario,
-            onPressed: () => ref
-                .read(tokenProvider.notifier)
-                .definir(null),
+            onPressed: () => ref.read(tokenProvider.notifier).definir(null),
           ),
 
           const SizedBox(width: 8),
@@ -435,23 +393,14 @@ class ClientesPage extends ConsumerWidget {
         backgroundColor: _destaque,
         foregroundColor: _texto,
         elevation: 1,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
-        onPressed: () =>
-            context.push('/clientes/novo'),
-        child: const Icon(
-          Icons.add_rounded,
-          size: 28,
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        onPressed: () => context.push('/clientes/novo'),
+        child: const Icon(Icons.add_rounded, size: 28),
       ),
 
       body: clientes.when(
         loading: () => const Center(
-          child: CircularProgressIndicator(
-            color: _destaque,
-            strokeWidth: 2.5,
-          ),
+          child: CircularProgressIndicator(color: _destaque, strokeWidth: 2.5),
         ),
 
         error: (erro, _) => _estadoErro(ref, erro),
@@ -469,9 +418,7 @@ class ClientesPage extends ConsumerWidget {
             },
 
             child: ListView.builder(
-              padding: const EdgeInsets.fromLTRB(
-                16, 16, 16, 96,
-              ),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
               itemCount: lista.length,
               itemBuilder: (context, indice) {
                 final cliente = lista[indice];

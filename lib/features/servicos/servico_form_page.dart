@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -14,12 +13,10 @@ class ServicoFormPage extends ConsumerStatefulWidget {
   final Servico? servico;
 
   @override
-  ConsumerState<ServicoFormPage> createState() =>
-      _ServicoFormPageState();
+  ConsumerState<ServicoFormPage> createState() => _ServicoFormPageState();
 }
 
-class _ServicoFormPageState
-    extends ConsumerState<ServicoFormPage> {
+class _ServicoFormPageState extends ConsumerState<ServicoFormPage> {
   final _formKey = GlobalKey<FormState>();
 
   late final TextEditingController _nomeCtrl;
@@ -50,18 +47,14 @@ class _ServicoFormPageState
     _nomeCtrl = TextEditingController(text: s?.nome);
 
     _precoCtrl = TextEditingController(
-      text: s == null
-          ? ''
-          : s.preco.toStringAsFixed(2).replaceAll('.', ','),
+      text: s == null ? '' : s.preco.toStringAsFixed(2).replaceAll('.', ','),
     );
 
     _duracaoCtrl = TextEditingController(
       text: (s?.duracaoMinutos ?? 30).toString(),
     );
 
-    _descricaoCtrl = TextEditingController(
-      text: s?.descricao,
-    );
+    _descricaoCtrl = TextEditingController(text: s?.descricao);
   }
 
   @override
@@ -75,9 +68,7 @@ class _ServicoFormPageState
 
   /// Aceita "35,50" e "35.50".
   double? _lerPreco(String texto) {
-    return double.tryParse(
-      texto.trim().replaceAll(',', '.'),
-    );
+    return double.tryParse(texto.trim().replaceAll(',', '.'));
   }
 
   Future<void> _salvar() async {
@@ -93,9 +84,7 @@ class _ServicoFormPageState
     final dados = {
       'nome': _nomeCtrl.text.trim(),
       'preco': _lerPreco(_precoCtrl.text),
-      'duracao_minutos': int.parse(
-        _duracaoCtrl.text.trim(),
-      ),
+      'duracao_minutos': int.parse(_duracaoCtrl.text.trim()),
       'descricao': descricao.isEmpty ? null : descricao,
     };
 
@@ -103,10 +92,7 @@ class _ServicoFormPageState
 
     try {
       if (_editando) {
-        await repo.atualizar(
-          widget.servico!.id,
-          dados,
-        );
+        await repo.atualizar(widget.servico!.id, dados);
       } else {
         await repo.criar(dados);
       }
@@ -130,30 +116,17 @@ class _ServicoFormPageState
     required IconData icone,
     String? prefixo,
   }) {
-    OutlineInputBorder criarBorda(
-      Color cor,
-      double largura,
-    ) {
+    OutlineInputBorder criarBorda(Color cor, double largura) {
       return OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
-          color: cor,
-          width: largura,
-        ),
+        borderSide: BorderSide(color: cor, width: largura),
       );
     }
 
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(
-        fontSize: 14,
-        color: _textoSecundario,
-      ),
-      prefixIcon: Icon(
-        icone,
-        size: 20,
-        color: _textoSecundario,
-      ),
+      labelStyle: const TextStyle(fontSize: 14, color: _textoSecundario),
+      prefixIcon: Icon(icone, size: 20, color: _textoSecundario),
       prefixText: prefixo,
       prefixStyle: const TextStyle(
         fontSize: 14,
@@ -162,19 +135,13 @@ class _ServicoFormPageState
       ),
       filled: true,
       fillColor: _superficie,
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 18,
-      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
       border: criarBorda(_borda, 1),
       enabledBorder: criarBorda(_borda, 1),
       focusedBorder: criarBorda(_destaque, 1.5),
       errorBorder: criarBorda(_erroCor, 1),
       focusedErrorBorder: criarBorda(_erroCor, 1.5),
-      errorStyle: const TextStyle(
-        color: _erroCor,
-        fontSize: 12,
-      ),
+      errorStyle: const TextStyle(color: _erroCor, fontSize: 12),
     );
   }
 
@@ -188,11 +155,7 @@ class _ServicoFormPageState
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Icon(
-            Icons.error_outline_rounded,
-            color: _erroCor,
-            size: 20,
-          ),
+          const Icon(Icons.error_outline_rounded, color: _erroCor, size: 20),
 
           const SizedBox(width: 10),
 
@@ -220,9 +183,7 @@ class _ServicoFormPageState
         backgroundColor: _fundo,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
-        iconTheme: const IconThemeData(
-          color: _texto,
-        ),
+        iconTheme: const IconThemeData(color: _texto),
         title: Text(
           _editando ? 'Editar serviço' : 'Novo serviço',
           style: const TextStyle(
@@ -236,13 +197,9 @@ class _ServicoFormPageState
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(
-              16, 16, 16, 32,
-            ),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
             child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: 520,
-              ),
+              constraints: const BoxConstraints(maxWidth: 520),
               child: Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
@@ -253,8 +210,7 @@ class _ServicoFormPageState
                 child: Form(
                   key: _formKey,
                   child: Column(
-                    crossAxisAlignment:
-                        CrossAxisAlignment.stretch,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       // Cabeçalho do formulário
                       Text(
@@ -273,9 +229,9 @@ class _ServicoFormPageState
                       Text(
                         _editando
                             ? 'Atualize os dados do serviço '
-                                'oferecido pela barbearia.'
+                                  'oferecido pela barbearia.'
                             : 'Defina as informações do serviço '
-                                'que será oferecido.',
+                                  'que será oferecido.',
                         style: const TextStyle(
                           fontSize: 13,
                           color: _textoSecundario,
@@ -288,18 +244,16 @@ class _ServicoFormPageState
                       // Nome do serviço
                       TextFormField(
                         controller: _nomeCtrl,
-                        textCapitalization:
-                            TextCapitalization.sentences,
+                        textCapitalization: TextCapitalization.sentences,
                         textInputAction: TextInputAction.next,
                         decoration: _decoracaoCampo(
                           label: 'Nome do serviço *',
                           icone: Icons.content_cut_rounded,
                         ),
                         validator: (valor) =>
-                            (valor == null ||
-                                    valor.trim().isEmpty)
-                                ? 'Informe o nome'
-                                : null,
+                            (valor == null || valor.trim().isEmpty)
+                            ? 'Informe o nome'
+                            : null,
                       ),
 
                       const SizedBox(height: 16),
@@ -307,8 +261,7 @@ class _ServicoFormPageState
                       // Preço
                       TextFormField(
                         controller: _precoCtrl,
-                        keyboardType:
-                            const TextInputType.numberWithOptions(
+                        keyboardType: const TextInputType.numberWithOptions(
                           decimal: true,
                         ),
                         textInputAction: TextInputAction.next,
@@ -340,12 +293,9 @@ class _ServicoFormPageState
                           icone: Icons.schedule_rounded,
                         ),
                         validator: (valor) {
-                          final minutos = int.tryParse(
-                            (valor ?? '').trim(),
-                          );
+                          final minutos = int.tryParse((valor ?? '').trim());
 
-                          if (minutos == null ||
-                              minutos <= 0) {
+                          if (minutos == null || minutos <= 0) {
                             return 'Informe a duração em minutos';
                           }
 
@@ -377,19 +327,16 @@ class _ServicoFormPageState
                       SizedBox(
                         height: 52,
                         child: FilledButton.icon(
-                          onPressed:
-                              _carregando ? null : _salvar,
+                          onPressed: _carregando ? null : _salvar,
                           style: FilledButton.styleFrom(
                             backgroundColor: _destaque,
                             foregroundColor: _texto,
-                            disabledBackgroundColor:
-                                _destaque.withValues(
-                                  alpha: 0.5,
-                                ),
+                            disabledBackgroundColor: _destaque.withValues(
+                              alpha: 0.5,
+                            ),
                             elevation: 0,
                             shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             textStyle: const TextStyle(
                               fontSize: 15,
@@ -400,21 +347,13 @@ class _ServicoFormPageState
                               ? const SizedBox(
                                   width: 18,
                                   height: 18,
-                                  child:
-                                      CircularProgressIndicator(
+                                  child: CircularProgressIndicator(
                                     strokeWidth: 2,
                                     color: _texto,
                                   ),
                                 )
-                              : const Icon(
-                                  Icons.check_rounded,
-                                  size: 20,
-                                ),
-                          label: Text(
-                            _carregando
-                                ? 'Salvando...'
-                                : 'Salvar',
-                          ),
+                              : const Icon(Icons.check_rounded, size: 20),
+                          label: Text(_carregando ? 'Salvando...' : 'Salvar'),
                         ),
                       ),
                     ],

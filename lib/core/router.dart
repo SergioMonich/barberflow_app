@@ -10,6 +10,8 @@ import '../features/servicos/servico_form_page.dart';
 import '../features/servicos/servicos_page.dart';
 import '../features/agenda/agenda_page.dart';
 import '../features/agenda/agendamento_form_page.dart';
+import '../features/financeiro/financeiro_page.dart';
+import '../features/financeiro/movimentacao_form_page.dart';
 import 'api_client.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -59,13 +61,18 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) =>
             ServicoFormPage(servico: state.extra as Servico?),
       ),
-            GoRoute(
-        path: '/agenda',
-        builder: (context, state) => const AgendaPage(),
-      ),
+      GoRoute(path: '/agenda', builder: (context, state) => const AgendaPage()),
       GoRoute(
         path: '/agenda/novo',
         builder: (context, state) => const AgendamentoFormPage(),
+      ),
+      GoRoute(
+        path: '/financeiro',
+        builder: (context, state) => const FinanceiroPage(),
+      ),
+      GoRoute(
+        path: '/financeiro/novo',
+        builder: (context, state) => const MovimentacaoFormPage(),
       ),
     ],
   );

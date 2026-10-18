@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -17,8 +16,7 @@ class AgendamentoFormPage extends ConsumerStatefulWidget {
       _AgendamentoFormPageState();
 }
 
-class _AgendamentoFormPageState
-    extends ConsumerState<AgendamentoFormPage> {
+class _AgendamentoFormPageState extends ConsumerState<AgendamentoFormPage> {
   final _obsCtrl = TextEditingController();
 
   int? _clienteId;
@@ -97,9 +95,7 @@ class _AgendamentoFormPageState
             ),
           ),
           child: MediaQuery(
-            data: MediaQuery.of(context).copyWith(
-              alwaysUse24HourFormat: true,
-            ),
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
             child: child!,
           ),
         );
@@ -148,13 +144,9 @@ class _AgendamentoFormPageState
     };
 
     try {
-      await ref
-          .read(agendamentosRepositoryProvider)
-          .criar(dados);
+      await ref.read(agendamentosRepositoryProvider).criar(dados);
 
-      ref
-          .read(diaSelecionadoProvider.notifier)
-          .definir(_data);
+      ref.read(diaSelecionadoProvider.notifier).definir(_data);
 
       ref.invalidate(agendamentosDoDiaProvider);
 
@@ -170,39 +162,23 @@ class _AgendamentoFormPageState
     }
   }
 
-  InputDecoration _decoracaoCampo({
-    required String label,
-    IconData? icone,
-  }) {
+  InputDecoration _decoracaoCampo({required String label, IconData? icone}) {
     OutlineInputBorder borda(Color cor, double largura) {
       return OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: BorderSide(
-          color: cor,
-          width: largura,
-        ),
+        borderSide: BorderSide(color: cor, width: largura),
       );
     }
 
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(
-        fontSize: 14,
-        color: _textoSecundario,
-      ),
+      labelStyle: const TextStyle(fontSize: 14, color: _textoSecundario),
       prefixIcon: icone == null
           ? null
-          : Icon(
-              icone,
-              size: 20,
-              color: _textoSecundario,
-            ),
+          : Icon(icone, size: 20, color: _textoSecundario),
       filled: true,
       fillColor: _superficie,
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 18,
-      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
       border: borda(_borda, 1),
       enabledBorder: borda(_borda, 1),
       focusedBorder: borda(_destaque, 1.5),
@@ -248,23 +224,13 @@ class _AgendamentoFormPageState
           height: 54,
           child: OutlinedButton.icon(
             onPressed: aoPressionar,
-            icon: Icon(
-              icone,
-              size: 19,
-              color: _destaque,
-            ),
-            label: Text(
-              valor,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
+            icon: Icon(icone, size: 19, color: _destaque),
+            label: Text(valor, maxLines: 1, overflow: TextOverflow.ellipsis),
             style: OutlinedButton.styleFrom(
               foregroundColor: _texto,
               backgroundColor: _superficie,
               side: const BorderSide(color: _borda),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -281,11 +247,9 @@ class _AgendamentoFormPageState
 
   @override
   Widget build(BuildContext context) {
-    final clientes =
-        ref.watch(clientesProvider).asData?.value ?? [];
+    final clientes = ref.watch(clientesProvider).asData?.value ?? [];
 
-    final servicos =
-        ref.watch(servicosProvider).asData?.value ?? [];
+    final servicos = ref.watch(servicosProvider).asData?.value ?? [];
 
     return Scaffold(
       backgroundColor: _fundo,
@@ -308,13 +272,9 @@ class _AgendamentoFormPageState
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(
-              16, 16, 16, 32,
-            ),
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
             child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: 520,
-              ),
+              constraints: const BoxConstraints(maxWidth: 520),
               child: Container(
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
@@ -323,8 +283,7 @@ class _AgendamentoFormPageState
                   border: Border.all(color: _borda),
                 ),
                 child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.stretch,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const Text(
                       'Informações do atendimento',
@@ -349,20 +308,15 @@ class _AgendamentoFormPageState
 
                     const SizedBox(height: 24),
 
-                    if (clientes.isEmpty ||
-                        servicos.isEmpty) ...[
+                    if (clientes.isEmpty || servicos.isEmpty) ...[
                       Container(
                         padding: const EdgeInsets.all(14),
                         decoration: BoxDecoration(
-                          color: _destaque.withValues(
-                            alpha: 0.10,
-                          ),
-                          borderRadius:
-                              BorderRadius.circular(10),
+                          color: _destaque.withValues(alpha: 0.10),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: const Row(
-                          crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Icon(
                               Icons.info_outline_rounded,
@@ -398,30 +352,23 @@ class _AgendamentoFormPageState
                       ),
                       expandedInsets: EdgeInsets.zero,
                       enableFilter: true,
-                      inputDecorationTheme:
-                          InputDecorationTheme(
+                      inputDecorationTheme: InputDecorationTheme(
                         filled: true,
                         fillColor: _superficie,
-                        contentPadding:
-                            const EdgeInsets.symmetric(
+                        contentPadding: const EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 18,
                         ),
                         border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(12),
-                          borderSide:
-                              const BorderSide(color: _borda),
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: _borda),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(12),
-                          borderSide:
-                              const BorderSide(color: _borda),
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: _borda),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
                             color: _destaque,
                             width: 1.5,
@@ -430,10 +377,7 @@ class _AgendamentoFormPageState
                       ),
                       dropdownMenuEntries: [
                         for (final c in clientes)
-                          DropdownMenuEntry(
-                            value: c.id,
-                            label: c.nome,
-                          ),
+                          DropdownMenuEntry(value: c.id, label: c.nome),
                       ],
                       onSelected: (valor) {
                         setState(() => _clienteId = valor);
@@ -449,30 +393,23 @@ class _AgendamentoFormPageState
                         color: _textoSecundario,
                       ),
                       expandedInsets: EdgeInsets.zero,
-                      inputDecorationTheme:
-                          InputDecorationTheme(
+                      inputDecorationTheme: InputDecorationTheme(
                         filled: true,
                         fillColor: _superficie,
-                        contentPadding:
-                            const EdgeInsets.symmetric(
+                        contentPadding: const EdgeInsets.symmetric(
                           horizontal: 16,
                           vertical: 18,
                         ),
                         border: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(12),
-                          borderSide:
-                              const BorderSide(color: _borda),
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: _borda),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(12),
-                          borderSide:
-                              const BorderSide(color: _borda),
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(color: _borda),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderRadius:
-                              BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(
                             color: _destaque,
                             width: 1.5,
@@ -503,8 +440,7 @@ class _AgendamentoFormPageState
                           child: _seletorDataHora(
                             titulo: 'Data',
                             valor: formatarData(_data),
-                            icone:
-                                Icons.calendar_today_outlined,
+                            icone: Icons.calendar_today_outlined,
                             aoPressionar: _escolherData,
                           ),
                         ),
@@ -517,8 +453,7 @@ class _AgendamentoFormPageState
                             valor:
                                 '${_hora.hour.toString().padLeft(2, '0')}:'
                                 '${_hora.minute.toString().padLeft(2, '0')}',
-                            icone:
-                                Icons.access_time_rounded,
+                            icone: Icons.access_time_rounded,
                             aoPressionar: _escolherHora,
                           ),
                         ),
@@ -544,15 +479,11 @@ class _AgendamentoFormPageState
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: _erroCor.withValues(
-                            alpha: 0.08,
-                          ),
-                          borderRadius:
-                              BorderRadius.circular(10),
+                          color: _erroCor.withValues(alpha: 0.08),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                         child: Row(
-                          crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Icon(
                               Icons.error_outline_rounded,
@@ -581,19 +512,16 @@ class _AgendamentoFormPageState
                     SizedBox(
                       height: 52,
                       child: FilledButton.icon(
-                        onPressed:
-                            _carregando ? null : _salvar,
+                        onPressed: _carregando ? null : _salvar,
                         style: FilledButton.styleFrom(
                           backgroundColor: _destaque,
                           foregroundColor: _texto,
-                          disabledBackgroundColor:
-                              _destaque.withValues(
-                                alpha: 0.5,
-                              ),
+                          disabledBackgroundColor: _destaque.withValues(
+                            alpha: 0.5,
+                          ),
                           elevation: 0,
                           shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           textStyle: const TextStyle(
                             fontSize: 15,
@@ -604,21 +532,13 @@ class _AgendamentoFormPageState
                             ? const SizedBox(
                                 width: 18,
                                 height: 18,
-                                child:
-                                    CircularProgressIndicator(
+                                child: CircularProgressIndicator(
                                   strokeWidth: 2,
                                   color: _texto,
                                 ),
                               )
-                            : const Icon(
-                                Icons.check_rounded,
-                                size: 20,
-                              ),
-                        label: Text(
-                          _carregando
-                              ? 'Salvando...'
-                              : 'Agendar',
-                        ),
+                            : const Icon(Icons.check_rounded, size: 20),
+                        label: Text(_carregando ? 'Salvando...' : 'Agendar'),
                       ),
                     ),
                   ],

@@ -7,7 +7,8 @@ String formatarDinheiro(double valor) {
 String _dois(int n) => n.toString().padLeft(2, '0');
 
 /// Ex.: 10/10/2026
-String formatarData(DateTime d) => '${_dois(d.day)}/${_dois(d.month)}/${d.year}';
+String formatarData(DateTime d) =>
+    '${_dois(d.day)}/${_dois(d.month)}/${d.year}';
 
 /// Ex.: 15:00
 String formatarHora(DateTime d) => '${_dois(d.hour)}:${_dois(d.minute)}';
@@ -18,7 +19,7 @@ const _diasDaSemana = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
 String rotuloDia(DateTime d) =>
     '${_diasDaSemana[d.weekday - 1]}, ${formatarData(d)}';
 
-/// Formato que a API espera em datas sem hora. Ex.: 2026-10-05
+//// Formato que a API espera em datas sem hora. Ex.: 2026-10-05
 String formatarDataIso(DateTime d) =>
     '${d.year}-${_dois(d.month)}-${_dois(d.day)}';
 

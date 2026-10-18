@@ -50,11 +50,14 @@ class DiaSelecionado extends Notifier<DateTime> {
   }
 }
 
-final diaSelecionadoProvider =
-    NotifierProvider<DiaSelecionado, DateTime>(DiaSelecionado.new);
+final diaSelecionadoProvider = NotifierProvider<DiaSelecionado, DateTime>(
+  DiaSelecionado.new,
+);
 
 /// Agendamentos do dia selecionado. Recarregar: ref.invalidate(agendamentosDoDiaProvider).
-final agendamentosDoDiaProvider = FutureProvider<List<Agendamento>>((ref) async {
+final agendamentosDoDiaProvider = FutureProvider<List<Agendamento>>((
+  ref,
+) async {
   final token = ref.watch(tokenProvider);
   if (token == null) return [];
   final dia = ref.watch(diaSelecionadoProvider);

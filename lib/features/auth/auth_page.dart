@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/api_client.dart';
@@ -57,10 +56,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
         );
       }
 
-      final token = await repo.login(
-        _emailCtrl.text.trim(),
-        _senhaCtrl.text,
-      );
+      final token = await repo.login(_emailCtrl.text.trim(), _senhaCtrl.text);
 
       // Mantém o redirecionamento original.
       ref.read(tokenProvider.notifier).definir(token);
@@ -81,21 +77,11 @@ class _AuthPageState extends ConsumerState<AuthPage> {
   }) {
     return InputDecoration(
       labelText: label,
-      labelStyle: const TextStyle(
-        color: _textoSecundario,
-        fontSize: 14,
-      ),
-      prefixIcon: Icon(
-        icone,
-        size: 20,
-        color: _textoSecundario,
-      ),
+      labelStyle: const TextStyle(color: _textoSecundario, fontSize: 14),
+      prefixIcon: Icon(icone, size: 20, color: _textoSecundario),
       filled: true,
       fillColor: _superficie,
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 18,
-      ),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: _borda),
@@ -106,10 +92,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
-        borderSide: const BorderSide(
-          color: _destaque,
-          width: 1.5,
-        ),
+        borderSide: const BorderSide(color: _destaque, width: 1.5),
       ),
     );
   }
@@ -121,14 +104,9 @@ class _AuthPageState extends ConsumerState<AuthPage> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 24,
-              vertical: 32,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
             child: ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxWidth: 400,
-              ),
+              constraints: const BoxConstraints(maxWidth: 400),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -187,13 +165,10 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                       border: Border.all(color: _borda),
                     ),
                     child: Column(
-                      crossAxisAlignment:
-                          CrossAxisAlignment.stretch,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          _modoRegistro
-                              ? 'Criar conta'
-                              : 'Acessar conta',
+                          _modoRegistro ? 'Criar conta' : 'Acessar conta',
                           style: const TextStyle(
                             fontSize: 19,
                             fontWeight: FontWeight.w600,
@@ -218,8 +193,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                         if (_modoRegistro) ...[
                           TextField(
                             controller: _nomeCtrl,
-                            textCapitalization:
-                                TextCapitalization.words,
+                            textCapitalization: TextCapitalization.words,
                             decoration: _decoracaoCampo(
                               label: 'Seu nome',
                               icone: Icons.person_outline_rounded,
@@ -241,8 +215,7 @@ class _AuthPageState extends ConsumerState<AuthPage> {
 
                         TextField(
                           controller: _emailCtrl,
-                          keyboardType:
-                              TextInputType.emailAddress,
+                          keyboardType: TextInputType.emailAddress,
                           decoration: _decoracaoCampo(
                             label: 'E-mail',
                             icone: Icons.mail_outline_rounded,
@@ -266,15 +239,11 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                           Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: _erroCor.withValues(
-                                alpha: 0.08,
-                              ),
-                              borderRadius:
-                                  BorderRadius.circular(10),
+                              color: _erroCor.withValues(alpha: 0.08),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                             child: Row(
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Icon(
                                   Icons.error_outline_rounded,
@@ -300,18 +269,15 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                         SizedBox(
                           height: 52,
                           child: FilledButton(
-                            onPressed:
-                                _carregando ? null : _enviar,
+                            onPressed: _carregando ? null : _enviar,
                             style: FilledButton.styleFrom(
                               backgroundColor: _destaque,
                               foregroundColor: _texto,
-                              disabledBackgroundColor:
-                                  _destaque.withValues(
-                                    alpha: 0.5,
-                                  ),
+                              disabledBackgroundColor: _destaque.withValues(
+                                alpha: 0.5,
+                              ),
                               shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(10),
                               ),
                               elevation: 0,
                               textStyle: const TextStyle(
@@ -323,16 +289,13 @@ class _AuthPageState extends ConsumerState<AuthPage> {
                                 ? const SizedBox(
                                     height: 20,
                                     width: 20,
-                                    child:
-                                        CircularProgressIndicator(
+                                    child: CircularProgressIndicator(
                                       strokeWidth: 2,
                                       color: _texto,
                                     ),
                                   )
                                 : Text(
-                                    _modoRegistro
-                                        ? 'Criar conta'
-                                        : 'Entrar',
+                                    _modoRegistro ? 'Criar conta' : 'Entrar',
                                   ),
                           ),
                         ),
@@ -373,4 +336,3 @@ class _AuthPageState extends ConsumerState<AuthPage> {
     );
   }
 }
-

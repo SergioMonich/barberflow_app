@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -32,9 +31,7 @@ class AgendaPage extends ConsumerWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: _superficie,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text(
           titulo,
           style: const TextStyle(
@@ -54,9 +51,7 @@ class AgendaPage extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            style: TextButton.styleFrom(
-              foregroundColor: _textoSecundario,
-            ),
+            style: TextButton.styleFrom(foregroundColor: _textoSecundario),
             child: const Text('Voltar'),
           ),
           FilledButton(
@@ -88,9 +83,9 @@ class AgendaPage extends ConsumerWidget {
         rotuloDoStatus(novoStatus),
         novoStatus == 'concluido'
             ? 'Marcar como concluído? A receita será lançada no financeiro '
-                'e o status não poderá mais mudar.'
+                  'e o status não poderá mais mudar.'
             : 'Marcar como "${rotuloDoStatus(novoStatus)}"? '
-                'O status não poderá mais mudar.',
+                  'O status não poderá mais mudar.',
       );
 
       if (!ok) return;
@@ -104,19 +99,14 @@ class AgendaPage extends ConsumerWidget {
       ref.invalidate(agendamentosDoDiaProvider);
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(mensagemDeErro(e)),
-          ),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(mensagemDeErro(e))));
       }
     }
   }
 
-  Future<void> _escolherDia(
-    BuildContext context,
-    WidgetRef ref,
-  ) async {
+  Future<void> _escolherDia(BuildContext context, WidgetRef ref) async {
     final atual = ref.read(diaSelecionadoProvider);
 
     final escolhido = await showDatePicker(
@@ -140,9 +130,7 @@ class AgendaPage extends ConsumerWidget {
     );
 
     if (escolhido != null) {
-      ref
-          .read(diaSelecionadoProvider.notifier)
-          .definir(escolhido);
+      ref.read(diaSelecionadoProvider.notifier).definir(escolhido);
     }
   }
 
@@ -165,21 +153,14 @@ class AgendaPage extends ConsumerWidget {
     final cor = _corDoStatus(ag.status);
 
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 10,
-        vertical: 6,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: cor.withValues(alpha: 0.10),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
         ag.statusRotulo,
-        style: TextStyle(
-          color: cor,
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-        ),
+        style: TextStyle(color: cor, fontSize: 12, fontWeight: FontWeight.w600),
       ),
     );
   }
@@ -262,8 +243,7 @@ class AgendaPage extends ConsumerWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  onSelected: (novo) =>
-                      _mudarStatus(context, ref, ag, novo),
+                  onSelected: (novo) => _mudarStatus(context, ref, ag, novo),
                   itemBuilder: (_) => [
                     for (final s in proximos)
                       PopupMenuItem<String>(
@@ -277,10 +257,7 @@ class AgendaPage extends ConsumerWidget {
 
           const SizedBox(height: 16),
 
-          Container(
-            height: 1,
-            color: _borda,
-          ),
+          Container(height: 1, color: _borda),
 
           const SizedBox(height: 14),
 
@@ -300,8 +277,7 @@ class AgendaPage extends ConsumerWidget {
             ],
           ),
 
-          if (ag.observacoes != null &&
-              ag.observacoes!.isNotEmpty) ...[
+          if (ag.observacoes != null && ag.observacoes!.isNotEmpty) ...[
             const SizedBox(height: 14),
 
             Row(
@@ -391,14 +367,12 @@ class AgendaPage extends ConsumerWidget {
     final agendamentos = ref.watch(agendamentosDoDiaProvider);
 
     final clientes = {
-      for (final c
-          in ref.watch(clientesProvider).asData?.value ?? [])
+      for (final c in ref.watch(clientesProvider).asData?.value ?? [])
         c.id: c.nome,
     };
 
     final servicos = {
-      for (final s
-          in ref.watch(servicosProvider).asData?.value ?? [])
+      for (final s in ref.watch(servicosProvider).asData?.value ?? [])
         s.id: s.nome,
     };
 
@@ -424,31 +398,29 @@ class AgendaPage extends ConsumerWidget {
         actions: [
           IconButton(
             tooltip: 'Clientes',
-            icon: const Icon(
-              Icons.people_outline_rounded,
-            ),
+            icon: const Icon(Icons.people_outline_rounded),
             color: _texto,
             onPressed: () => context.push('/clientes'),
           ),
 
           IconButton(
             tooltip: 'Serviços',
-            icon: const Icon(
-              Icons.content_cut_rounded,
-            ),
+            icon: const Icon(Icons.content_cut_rounded),
             color: _texto,
             onPressed: () => context.push('/servicos'),
           ),
 
           IconButton(
+            tooltip: 'Financeiro',
+            icon: const Icon(Icons.attach_money),
+            onPressed: () => context.push('/financeiro'),
+          ),
+
+          IconButton(
             tooltip: 'Sair',
-            icon: const Icon(
-              Icons.logout_rounded,
-            ),
+            icon: const Icon(Icons.logout_rounded),
             color: _textoSecundario,
-            onPressed: () => ref
-                .read(tokenProvider.notifier)
-                .definir(null),
+            onPressed: () => ref.read(tokenProvider.notifier).definir(null),
           ),
 
           const SizedBox(width: 8),
@@ -460,9 +432,7 @@ class AgendaPage extends ConsumerWidget {
         backgroundColor: _destaque,
         foregroundColor: _texto,
         elevation: 1,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         onPressed: () => context.push('/agenda/novo'),
         child: const Icon(Icons.add_rounded, size: 28),
       ),
@@ -472,10 +442,7 @@ class AgendaPage extends ConsumerWidget {
           // Seletor de data
           Container(
             margin: const EdgeInsets.fromLTRB(16, 12, 16, 16),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 6,
-              vertical: 6,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
             decoration: BoxDecoration(
               color: _superficie,
               borderRadius: BorderRadius.circular(14),
@@ -485,30 +452,19 @@ class AgendaPage extends ConsumerWidget {
               children: [
                 IconButton(
                   tooltip: 'Dia anterior',
-                  icon: const Icon(
-                    Icons.chevron_left_rounded,
-                  ),
+                  icon: const Icon(Icons.chevron_left_rounded),
                   color: _texto,
                   onPressed: () => ref
                       .read(diaSelecionadoProvider.notifier)
-                      .definir(
-                        DateTime(
-                          dia.year,
-                          dia.month,
-                          dia.day - 1,
-                        ),
-                      ),
+                      .definir(DateTime(dia.year, dia.month, dia.day - 1)),
                 ),
 
                 Expanded(
                   child: TextButton(
-                    onPressed: () =>
-                        _escolherDia(context, ref),
+                    onPressed: () => _escolherDia(context, ref),
                     style: TextButton.styleFrom(
                       foregroundColor: _texto,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 4,
-                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
                     ),
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
@@ -539,19 +495,11 @@ class AgendaPage extends ConsumerWidget {
 
                 IconButton(
                   tooltip: 'Próximo dia',
-                  icon: const Icon(
-                    Icons.chevron_right_rounded,
-                  ),
+                  icon: const Icon(Icons.chevron_right_rounded),
                   color: _texto,
                   onPressed: () => ref
                       .read(diaSelecionadoProvider.notifier)
-                      .definir(
-                        DateTime(
-                          dia.year,
-                          dia.month,
-                          dia.day + 1,
-                        ),
-                      ),
+                      .definir(DateTime(dia.year, dia.month, dia.day + 1)),
                 ),
 
                 TextButton(
@@ -560,9 +508,7 @@ class AgendaPage extends ConsumerWidget {
                       .definir(DateTime.now()),
                   style: TextButton.styleFrom(
                     foregroundColor: _destaque,
-                    textStyle: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                    ),
+                    textStyle: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                   child: const Text('Hoje'),
                 ),
@@ -605,9 +551,8 @@ class AgendaPage extends ConsumerWidget {
                       const SizedBox(height: 20),
 
                       FilledButton(
-                        onPressed: () => ref.invalidate(
-                          agendamentosDoDiaProvider,
-                        ),
+                        onPressed: () =>
+                            ref.invalidate(agendamentosDoDiaProvider),
                         style: FilledButton.styleFrom(
                           backgroundColor: _destaque,
                           foregroundColor: _texto,
@@ -628,29 +573,20 @@ class AgendaPage extends ConsumerWidget {
                   color: _destaque,
                   onRefresh: () async {
                     ref.invalidate(agendamentosDoDiaProvider);
-                    await ref.read(
-                      agendamentosDoDiaProvider.future,
-                    );
+                    await ref.read(agendamentosDoDiaProvider.future);
                   },
 
                   child: ListView.builder(
-                    padding: const EdgeInsets.fromLTRB(
-                      16,
-                      0,
-                      16,
-                      96,
-                    ),
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 96),
                     itemCount: lista.length,
                     itemBuilder: (context, indice) {
                       final ag = lista[indice];
 
                       final cliente =
-                          clientes[ag.clienteId] ??
-                          'Cliente #${ag.clienteId}';
+                          clientes[ag.clienteId] ?? 'Cliente #${ag.clienteId}';
 
                       final servico =
-                          servicos[ag.servicoId] ??
-                          'Serviço #${ag.servicoId}';
+                          servicos[ag.servicoId] ?? 'Serviço #${ag.servicoId}';
 
                       return _cardAgendamento(
                         context: context,
