@@ -4,9 +4,16 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 
 // Web (Chrome): o backend esta no proprio PC -> 127.0.0.1
 // Emulador Android: o PC e visto como 10.0.2.2
-final String baseUrl = kIsWeb
-    ? 'http://127.0.0.1:8000'
-    : 'http://10.0.2.2:8000';
+//final String baseUrl = kIsWeb
+//    ? 'http://127.0.0.1:8000'
+//    : 'http://10.0.2.2:8000';
+
+// Pode ser definida na hora de compilar: --dart-define=API_URL=http://...
+const String _urlDaApi = String.fromEnvironment('API_URL');
+
+final String baseUrl = _urlDaApi.isNotEmpty
+    ? _urlDaApi
+    : (kIsWeb ? 'http://127.0.0.1:8000' : 'http://10.0.2.2:8000');
 
 /// Guarda o token JWT em memoria (some ao fechar o app).
 class TokenNotifier extends Notifier<String?> {
